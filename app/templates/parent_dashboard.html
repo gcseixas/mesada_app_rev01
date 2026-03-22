@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Pai{% endblock %}
+
+{% block content %}
+<section class="grid dashboard-grid">
+
+  <div class="card">
+    <h2>Resumo</h2>
+    <p class="muted">Saldo total distribuído</p>
+    <h3>R$ {{ total | default("0.00") }}</h3>
+  </div>
+
+  <div class="card">
+    <h2>Filhos</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Saldo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for child in children %}
+        <tr>
+          <td>{{ child.name }}</td>
+          <td>R$ {{ child.balance }}</td>
+          <td>
+            <a href="#" class="link">Ver</a>
+            <a href="#" class="link">Aprovações</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</section>
+{% endblock %}

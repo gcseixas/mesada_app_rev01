@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Filho{% endblock %}
+
+{% block content %}
+<section class="grid">
+
+  <div class="card">
+    <h2>{{ child.name }}</h2>
+    <p class="muted">Saldo atual</p>
+    <h3 class="big">R$ {{ child.balance }}</h3>
+
+    <a href="/lancar_tareda" class="btn">Lançar tarefa</a>
+  </div>
+
+  <div class="card">
+    <h2>Tarefas pendentes</h2>
+    <ul class="task-list">
+      {% for t in pending_tasks %}
+        <li>
+          <strong>{{ t.title }}</strong>
+          <span>R$ {{ t.amount }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</section>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Configurar Tarefas{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h1>Configurar tarefas</h1>
+
+    <form class="form inline" method="post">
+        {{ form.hidden_tag() }}
+
+        {{ form.title(placeholder="Nome da tarefa") }}
+        {{ form.amount(placeholder="Valor", step="0.01") }}
+
+        {{ form.submit(class="btn") }}
+    </form>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tarefa</th>
+                <th>Valor</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in tasks %}
+            <tr>
+                <td>{{ t.title }}</td>
+                <td>R$ {{ t.amount }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('remover_tarefa') }}">
+                        <input type="hidden" name="task_id" value="{{ t.id }}">
+                        <button type="button" class="link danger confirm-remove" data-task="{{ t.title }}">
+                            Remover
+                        </button>
+
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}

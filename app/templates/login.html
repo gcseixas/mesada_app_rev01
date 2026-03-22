@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Entrar</h1>
+    <p class="muted">Acesse sua conta</p>
+
+    <form class="form" method="POST">
+        {{ form.hidden_tag() }}
+
+        <label>{{ form.email.label }}</label>
+        {{ form.email }}
+
+        <label>{{ form.password.label }}</label>
+        {{ form.password }}
+
+        {{ form.submit(class="btn primary") }}
+    </form>
+
+</section>
+{% endblock %}

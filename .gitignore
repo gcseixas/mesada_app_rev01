@@ -1,0 +1,19 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# Cache Python
+__pycache__/
+*.pyc
+
+# Banco SQLite local
+*.db
+
+# Arquivos do sistema
+.DS_Store
+
+# Arquivos do Alembic compilados
+alembic/versions/*.pyc
+
+.vscode
+.env

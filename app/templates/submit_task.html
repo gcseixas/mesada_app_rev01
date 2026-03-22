@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Lançar Tarefa{% endblock %}
+
+{% block content %}
+<section class="card form-card">
+    <h1>Lançar tarefa</h1>
+    <form class="form" method="post">
+
+        <label>Tarefa</label>
+        <select name="task_id" required>
+            <option value="">Selecione</option>
+            {% for task in tasks %}
+            <option value="{{ task.id }}">
+                {{ task.title }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label>Observação</label>
+        <input type="text" name="note">
+
+        <label>Valor</label>
+        <input id="amount" readonly value="R$ 0.00">
+
+        <button class="btn primary">Enviar para aprovação</button>
+
+    </form>
+</section>
+{% endblock %}

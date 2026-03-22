@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Cadastro de filhos{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Cadastro de filhos</h1>
+
+
+    <form class="form" method="POST">
+        {{ form_cad.hidden_tag() }}
+
+        <label>{{ form_cad.name.label }}</label>
+        {{ form_cad.name }}
+
+        <label>{{ form_cad.email.label }}</label>
+        {{ form_cad.email }}
+
+        <label>{{ form_cad.password.label }}</label>
+        {{ form_cad.password }}
+
+        {{ form_cad.submit(class="btn primary") }}
+    </form>
+
+</section>
+{% endblock %}

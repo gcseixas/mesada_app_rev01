@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Aprovar Tarefas{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h1>Aprovações pendentes</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Filho</th>
+        <th>Tarefa</th>
+        <th>Valor</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in pending %}
+      <tr>
+        <td>{{ p.child }}</td>
+        <td>{{ p.task }}</td>
+        <td>R$ {{ p.amount }}</td>
+        <td>
+          <button class="btn small success" data-confirm="Aprovar tarefa?">Aprovar</button>
+          <button class="btn small danger" data-confirm="Rejeitar tarefa?">Rejeitar</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
