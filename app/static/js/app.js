@@ -1,13 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const taskSelect = document.querySelector("#task_type");
+  const taskSelect  = document.querySelector("#task_id");      
   const amountInput = document.querySelector("#amount");
+  const amountHidden = document.querySelector("#amount_hidden");
 
-  if (taskSelect && amountInput) {
+  if (taskSelect && amountInput && amountHidden) {
     taskSelect.addEventListener("change", () => {
       const opt = taskSelect.options[taskSelect.selectedIndex];
-      const val = opt.dataset.amount || 0;
-      amountInput.value = `R$ ${parseFloat(val).toFixed(2)}`;
+      const val = parseFloat(opt.dataset.amount || 0);
+
+      amountInput.value  = `R$ ${val.toFixed(2)}`;
+      amountHidden.value = val;
     });
   }
 
@@ -19,72 +22,44 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-});
+  let currentForm = null;
+  const confirmModal   = document.getElementById("confirm-modal");
+  const modalContent   = document.querySelector(".modal-content");
 
-document.querySelectorAll(".confirm-remove").forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentForm = btn.closest("form");
-    const taskName = btn.dataset.task;
+  document.querySelectorAll(".confirm-remove").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentForm = btn.closest("form");
+      const taskName = btn.dataset.task;
 
-    // Cria o conteúdo do modal dinamicamente
-    const modalContent = `
-      <h3>⚠️ Confirmar remoção</h3>
-      <p>Tem certeza que deseja remover esta tarefa?</p>
-      <span class="modal-highlight">"${taskName}"</span>
-      <p style="margin-top: 16px; font-size: 13px;">Esta ação não pode ser desfeita.</p>
-    `;
+      modalContent.innerHTML = `
+        <h3>⚠️ Confirmar remoção</h3>
+        <p>Tem certeza que deseja remover esta tarefa?</p>
+        <span class="modal-highlight">"${taskName}"</span>
+        <p style="margin-top: 16px; font-size: 13px;">Esta ação não pode ser desfeita.</p>
+        <div class="modal-actions">
+          <button id="cancel-btn" class="btn subtle">Cancelar</button>
+          <button id="confirm-btn" class="btn danger">Remover</button>
+        </div>
+      `;
 
-    document.querySelector(".modal-content").innerHTML = modalContent + `
-      <div class="modal-actions">
-        <button id="cancel-btn" class="btn subtle">Cancelar</button>
-        <button id="confirm-btn" class="btn danger">Remover</button>
-      </div>
-    `;
+      confirmModal?.classList.remove("hidden");
 
-    document.getElementById("confirm-modal").classList.remove("hidden");
+      document.getElementById("cancel-btn").onclick = () => {
+        currentForm = null;
+        confirmModal?.classList.add("hidden");
+      };
 
-    // Re-adiciona os event listeners aos novos botões
-    document.getElementById("cancel-btn").onclick = () => {
+      document.getElementById("confirm-btn").onclick = () => {
+        if (currentForm) currentForm.submit();
+      };
+    });
+  });
+
+  confirmModal?.addEventListener("click", (e) => {
+    if (e.target.id === "confirm-modal") {
       currentForm = null;
-      document.getElementById("confirm-modal").classList.add("hidden");
-    };
-
-    document.getElementById("confirm-btn").onclick = () => {
-      if (currentForm) {
-        currentForm.submit();
-      }
-    };
+      confirmModal.classList.add("hidden");
+    }
   });
+
 });
-
-// Fecha modal ao clicar fora
-document.getElementById("confirm-modal")?.addEventListener("click", (e) => {
-  if (e.target.id === "confirm-modal") {
-    currentForm = null;
-    document.getElementById("confirm-modal").classList.add("hidden");
-  }
-});
-
-let currentForm = null;
-
-document.querySelectorAll(".confirm-remove").forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentForm = btn.closest("form");
-
-    document.getElementById("modal-text").innerText =
-      `Tem certeza que deseja remover a tarefa "${btn.dataset.task}"?`;
-
-    document.getElementById("confirm-modal").classList.remove("hidden");
-  });
-});
-
-document.getElementById("cancel-btn").onclick = () => {
-  currentForm = null;
-  document.getElementById("confirm-modal").classList.add("hidden");
-};
-
-document.getElementById("confirm-btn").onclick = () => {
-  if (currentForm) {
-    currentForm.submit();
-  }
-};

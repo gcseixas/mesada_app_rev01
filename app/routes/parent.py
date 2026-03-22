@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
-from app import app, db
+from app import app, db, bcrypt
 from app.models import User, Task
 from app.forms import TaskForm, SignupChildForm
 from flask_login import login_required, current_user
@@ -9,7 +9,6 @@ from flask_login import login_required, current_user
 @login_required
 def parent_dashboard():
 
-    # 🔒 Proteção: só pais podem acessar
     if current_user.role != "parent":
         return redirect(url_for("child_dashboard"))
 
@@ -75,10 +74,12 @@ def tela_cadastro_filho():
         
         else:
             
+            senha_hash = bcrypt.generate_password_hash(form_cad.password.data)
+            
             usuario = User(
                 name = form_cad.name.data, # type: ignore
                 email = form_cad.email.data, # type: ignore
-                password = form_cad.password.data, # type: ignore
+                password = senha_hash, # type: ignore
                 role = 'child',   # type: ignore
                 parent_id = current_user.id # type: ignore
             )

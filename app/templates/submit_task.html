@@ -7,10 +7,10 @@
     <form class="form" method="post">
 
         <label>Tarefa</label>
-        <select name="task_id" required>
+        <select name="task_id" id="task_id" required>
             <option value="">Selecione</option>
             {% for task in tasks %}
-            <option value="{{ task.id }}">
+            <option value="{{ task.id }}" data-amount="{{ task.amount }}">
                 {{ task.title }}
             </option>
             {% endfor %}
@@ -20,7 +20,12 @@
         <input type="text" name="note">
 
         <label>Valor</label>
-        <input id="amount" readonly value="R$ 0.00">
+
+        <!-- VISUAL -->
+        <input id="amount" readonly>
+
+        <!-- REAL (vai pro backend) -->
+        <input type="hidden" name="amount" id="amount_hidden">
 
         <button class="btn primary">Enviar para aprovação</button>
 

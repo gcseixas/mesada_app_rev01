@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash
-from app import app, db
+from app import app, db, bcrypt
 from app.forms import LoginForm, SignupParentForm
 from app.models import User
 from flask_login import login_user, logout_user, login_required
@@ -10,7 +10,7 @@ def tela_login():
 
     if form.validate_on_submit():
         usuario = User.query.filter_by(email=form.email.data).first()
-        if usuario and form.password.data == usuario.password:
+        if usuario and bcrypt.check_password_hash(usuario.password, form.password.data) :
             login_user(usuario)
             return redirect(url_for('parent_dashboard'))
         else:
@@ -38,10 +38,12 @@ def tela_cadastro():
         
         else:
             
+            senha_hash = bcrypt.generate_password_hash(form_cad.password.data)
+            
             usuario = User(
                 name = form_cad.name.data, # type: ignore
                 email = form_cad.email.data, # type: ignore
-                password = form_cad.password.data, # type: ignore
+                password = senha_hash, # type: ignore
                 role = 'parent'   # type: ignore
             )
             
