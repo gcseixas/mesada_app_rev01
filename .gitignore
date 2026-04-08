@@ -17,3 +17,4 @@ alembic/versions/*.pyc
 
 .vscode
 .env
+.env.example

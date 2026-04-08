@@ -48,7 +48,7 @@ class SignupParentForm(FlaskForm):
     )
 
     submit = SubmitField("Criar conta")
-    
+
 
 class TaskForm(FlaskForm):
     title = StringField(
@@ -68,8 +68,8 @@ class TaskForm(FlaskForm):
     )
 
     submit = SubmitField("Adicionar")
-   
-   
+
+
 class SignupChildForm(FlaskForm):
     name = StringField(
         "Nome",
@@ -95,5 +95,29 @@ class SignupChildForm(FlaskForm):
     )
 
     submit = SubmitField("Criar conta")
-    
-    
+
+
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField(
+        "Senha atual",
+        validators=[
+            DataRequired(message="Informe a senha atual")
+        ]
+    )
+
+    new_password = PasswordField(
+        "Nova senha",
+        validators=[
+            DataRequired(message="Informe a nova senha"),
+            Length(min=6, message="A senha deve ter pelo menos 6 caracteres")
+        ]
+    )
+
+    confirm_password = PasswordField(
+        "Confirmar nova senha",
+        validators=[
+            DataRequired(message="Confirme a nova senha")
+        ]
+    )
+
+    submit = SubmitField("Atualizar senha")

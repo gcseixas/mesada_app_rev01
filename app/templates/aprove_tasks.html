@@ -3,13 +3,14 @@
 
 {% block content %}
 <section class="card">
-  <h1>Aprovações pendentes</h1>
+  <h1>Aprovações pendentes de {{ child.name }}</h1>
 
   <table class="table">
     <thead>
       <tr>
-        <th>Filho</th>
+        <th>Data</th>
         <th>Tarefa</th>
+        <th>Observação</th>
         <th>Valor</th>
         <th>Ações</th>
       </tr>
@@ -17,13 +18,27 @@
     <tbody>
       {% for p in pending %}
       <tr>
-        <td>{{ p.child }}</td>
-        <td>{{ p.task }}</td>
-        <td>R$ {{ p.amount }}</td>
+        <td>{{ p.submitted_at.strftime('%d/%m/%Y %H:%M') if p.submitted_at else '-' }}</td>
+        <td>{{ p.task.title }}</td>
+        <td title="{{ p.note or '' }}">{{ (p.note or '-')|truncate(60, True, '...') }}</td>
+        <td>R$ {{ p.task.amount }}</td>
         <td>
-          <button class="btn small success" data-confirm="Aprovar tarefa?">Aprovar</button>
-          <button class="btn small danger" data-confirm="Rejeitar tarefa?">Rejeitar</button>
+          <button
+            type="button"
+            class="btn small danger open-reject-modal"
+            data-action="{{ url_for('atualizar_aprovacao', submission_id=p.id, action='reject') }}"
+            data-task="{{ p.task.title }}"
+          >
+            Rejeitar
+          </button>
+          <form method="post" action="{{ url_for('atualizar_aprovacao', submission_id=p.id, action='approve') }}" style="display:inline-block;">
+            <button class="btn small success" type="submit">Aprovar</button>
+          </form>
         </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5">Nenhuma aprovação pendente.</td>
       </tr>
       {% endfor %}
     </tbody>

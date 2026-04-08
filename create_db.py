@@ -1,7 +1,10 @@
-from app import app, db
-from app import models  # IMPORTANTE: registra as tabelas
+import subprocess
+import sys
 
-with app.app_context():
-    db.create_all()
 
-print("Banco e tabelas criados com sucesso")
+subprocess.run(
+    [sys.executable, "-m", "flask", "--app", "run.py", "db", "upgrade"],
+    check=True,
+)
+
+print("Migracoes aplicadas com sucesso")

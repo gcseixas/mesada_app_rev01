@@ -2,12 +2,22 @@
 {% block title %}Dashboard Pai{% endblock %}
 
 {% block content %}
-<section class="grid dashboard-grid">
+<section class="grid">
+  <div class="grid dashboard-summary-grid">
+    <div class="card">
+      <p class="muted">Pendente de pagamento</p>
+      <h2>R$ {{ total | default("0.00") }}</h2>
+    </div>
 
-  <div class="card">
-    <h2>Resumo</h2>
-    <p class="muted">Saldo total distribuído</p>
-    <h3>R$ {{ total | default("0.00") }}</h3>
+    <div class="card">
+      <p class="muted">Aprovado</p>
+      <h2>R$ {{ total_approved | default("0.00") }}</h2>
+    </div>
+
+    <div class="card">
+      <p class="muted">Pago</p>
+      <h2>R$ {{ total_paid | default("0.00") }}</h2>
+    </div>
   </div>
 
   <div class="card">
@@ -16,7 +26,9 @@
       <thead>
         <tr>
           <th>Nome</th>
-          <th>Saldo</th>
+          <th>Pendente de pagamento</th>
+          <th>Aprovado</th>
+          <th>Pago</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -25,15 +37,20 @@
         <tr>
           <td>{{ child.name }}</td>
           <td>R$ {{ child.balance }}</td>
+          <td>R$ {{ child.approved_total }}</td>
+          <td>R$ {{ child.paid_total }}</td>
           <td>
-            <a href="#" class="link">Ver</a>
-            <a href="#" class="link">Aprovações</a>
+            <a href="{{ url_for('ver_filho', child_id=child.id) }}" class="link">Ver</a>
+            <a href="{{ url_for('aprovacoes_filho', child_id=child.id) }}" class="link">Aprovações</a>
           </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5">Nenhum filho cadastrado.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-
 </section>
 {% endblock %}

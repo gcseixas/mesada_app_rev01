@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Detalhes do Filho{% endblock %}
+
+{% block content %}
+<section class="grid dashboard-grid">
+  <div class="card">
+    <h2>{{ child.name }}</h2>
+    <p class="muted">Saldo pendente</p>
+    <h3>R$ {{ balance }}</h3>
+    <p class="muted">{{ child.email }}</p>
+
+    {% if balance > 0 %}
+    <form class="form" method="post" action="{{ url_for('registrar_pagamento', child_id=child.id) }}">
+      <label>Lançar pagamento</label>
+      <input type="number" name="amount" min="0.01" max="{{ balance }}" step="0.01" placeholder="Valor pago" required>
+      <input type="text" name="description" placeholder="Descrição do pagamento" maxlength="120">
+      <button class="btn success" type="submit">Registrar pagamento</button>
+    </form>
+    {% else %}
+    <p class="muted">Não há saldo pendente para pagamento.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Histórico de lançamentos</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Tarefa</th>
+          <th>Valor</th>
+          <th>Status</th>
+          <th>Motivo da reprovação</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in submissions %}
+        <tr>
+          <td>{{ s.submitted_at.strftime('%d/%m/%Y %H:%M') if s.submitted_at else '-' }}</td>
+          <td>{{ s.task.title }}</td>
+          <td>R$ {{ s.task.amount }}</td>
+          <td>{{ s.status_label }}</td>
+          <td>{{ s.rejection_reason or '-' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5">Nenhum lançamento encontrado.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Histórico financeiro</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for transaction in transactions %}
+        <tr>
+          <td>{{ transaction.created_at.strftime('%d/%m/%Y %H:%M') if transaction.created_at else '-' }}</td>
+          <td>{{ transaction.kind_label }}</td>
+          <td>{{ transaction.description }}</td>
+          <td>{% if transaction.amount < 0 %}-{% endif %}R$ {{ transaction.display_amount }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4">Nenhuma movimentação encontrada.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

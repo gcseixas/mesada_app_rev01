@@ -24,20 +24,22 @@
 
 <header class="topbar">
     <div class="container topbar-inner">
-        <a class="brand" href="#">Mesada<span class="accent">+</span></a>
+        <a
+            class="brand"
+            href="{% if current_user.is_authenticated and current_user.role == 'parent' %}{{ url_for('parent_dashboard') }}{% elif current_user.is_authenticated and current_user.role == 'child' %}{{ url_for('child_dashboard') }}{% else %}{{ url_for('tela_login') }}{% endif %}"
+        >Mesada<span class="accent">+</span></a>
 
         <nav class="nav">
             {% if current_user.is_authenticated and current_user.role == 'parent' %}
+                <a href="/trocar_senha" class="btn subtle">Trocar senha</a>
                 <a href="/cadastrar_filho" class="btn subtle">Cadastrar filhos</a>
                 <a href="/configurar_tarefa" class="btn subtle">Configurar tarefa</a>
                 <a href="/sair" class="btn subtle">Sair</a>
-            
             {% elif current_user.is_authenticated and current_user.role == 'child' %}
+                <a href="/trocar_senha" class="btn subtle">Trocar senha</a>
                 <a href="/sair" class="btn subtle">Sair</a>
-
             {% else %}
                 <a href="/cadastro" class="btn subtle">Cadastrar</a>
-                
             {% endif %}
         </nav>
     </div>
@@ -58,7 +60,11 @@
     </main>
 
     <footer class="footer">
-        <small>© Mesada+ — aprendizado em construção</small>
+        <small>© Mesada+</small>
+        <small>
+            Gabriel Seixas |
+            <a class="footer-link" href="https://wa.me/5521994267868" target="_blank" rel="noopener noreferrer">21994267868</a>
+        </small>
     </footer>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
